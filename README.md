@@ -1,8 +1,7 @@
-# CareerPilot AI — ATS Resume Scoring Agent
+# CareerPilot AI — Agent
 
 IBM SkillsBuild working model for the **CareerPilot AI** Lean Canvas (Team: DUO DYNAMICS).
-This is the flagship feature from the pitch — the **ATS Resume Scorer** — built as a real,
-autonomous AI agent rather than a single prompt.
+This is the flagship feature from the pitch —built as a real, autonomous AI agent rather than a single prompt.
 
 ## Why this satisfies the "Working Model" requirement
 
