@@ -9,7 +9,7 @@ This is the flagship feature from the pitch —built as a real, autonomous AI ag
 |---|---|
 | Working AI agent that performs a useful task | Scores a resume against a real job description and returns a match score, keyword gaps, and rewritten bullet points |
 | Autonomous, minimal manual intervention | One API call triggers a 4-step pipeline (Parse → Match → Generate → Self-review) with no human in the loop between steps |
-| Any framework allowed | FastAPI + the official Anthropic Python SDK (backend), React + Vite (frontend) |
+| Any framework allowed | FastAPI + the Google Gemini API via the `google-genai` SDK (backend), React + Vite (frontend) |
 | Vercel / Render / GitHub stack | Frontend → Vercel, Backend → Render, this repo → GitHub |
 
 ## How the agent works
@@ -28,9 +28,9 @@ resume text     ─▶ [2. MATCH, code]     deterministic keyword/section scorin
 ```
 
 Step 2 is plain Python, not an LLM call — the match score needs to be the same
-every time you re-run it on the same inputs. The LLM is used only where it adds
-real value: reading messy unstructured text (step 1) and writing tailored advice
-(steps 3–4).
+every time you re-run it on the same inputs. The LLM (Google Gemini) is used
+only where it adds real value: reading messy unstructured text (step 1) and
+writing tailored advice (steps 3–4).
 
 ## Project structure
 
@@ -59,7 +59,7 @@ python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 cp .env.example .env
-# edit .env and paste your key from https://console.anthropic.com/settings/keys
+# edit .env and paste your key from https://aistudio.google.com/apikey
 uvicorn main:app --reload --port 8000
 ```
 
@@ -90,7 +90,7 @@ Open the printed `localhost` URL, click **Load sample data**, then **Run CareerP
 3. Render will pick up `render.yaml` automatically (or set manually):
    - Build command: `pip install -r requirements.txt`
    - Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-4. Add environment variable `ANTHROPIC_API_KEY` (Render dashboard → Environment).
+4. Add environment variable `GEMINI_API_KEY` (Render dashboard → Environment).
 5. Once deployed, copy the Render URL (e.g. `https://careerpilot-ai-agent.onrender.com`).
 
 ### Frontend → Vercel
@@ -103,9 +103,10 @@ Open the printed `localhost` URL, click **Load sample data**, then **Run CareerP
 
 ## Notes / next steps
 
-- The model defaults to `claude-haiku-4-5-20251001` (cheap, fast, fine for a
-  keyword-matching task). Swap `CAREERPILOT_MODEL` to `claude-sonnet-5` in
-  Render's env vars if you want noticeably sharper rewritten bullets for a demo.
+- The model defaults to `gemini-2.5-flash` (cheap, fast, fine for a
+  keyword-matching task). Swap `CAREERPILOT_MODEL` to a stronger Gemini model
+  in Render's env vars if you want noticeably sharper rewritten bullets for a
+  demo.
 - Currently takes plain text input. If you want resume file upload (PDF/DOCX),
   that's a separate, well-scoped addition to `main.py` — say the word and I'll
   add it.
