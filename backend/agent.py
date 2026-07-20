@@ -15,7 +15,7 @@ from google import genai
 
 MODEL = os.environ.get(
     "CAREERPILOT_MODEL",
-    "gemini-2.5-flash"
+    "gemini-3.1-flash-lite"
 )
 
 
