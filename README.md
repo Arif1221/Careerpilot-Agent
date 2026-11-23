@@ -81,6 +81,20 @@ npm run dev
 
 Open the printed `localhost` URL, click **Load sample data**, then **Run CareerPilot Agent**.
 
+## Tests
+
+The backend has 31 unit tests (pytest). They never call Gemini: the matching and scoring step is pure Python, and the LLM steps run against a fake client.
+
+```bash
+cd backend
+pip install -r requirements.txt -r requirements-dev.txt
+pytest -q
+```
+
+They cover JSON extraction from messy model output, whole-word keyword matching (`Java` does not match `JavaScript`, `C++` and `Node.js` work), the 70/30 score weighting and section penalty, the full 4-step pipeline, and the API's validation and error codes (422 / 502 / 500). GitHub Actions runs them, plus the frontend build, on every push.
+
+Known issue, tracked by an `xfail` test: keywords containing `/` or `-` (for example `CI/CD`) are never matched, because `_normalize` strips those characters from the keyword but not from the resume.
+
 ## Deploying
 
 ### Backend → Render
